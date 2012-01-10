@@ -1,0 +1,23 @@
+<?php
+/**
+ * @file ucm_commerce_downloads_config.module
+ * Adds a rule that adds product key to orders when they are completed.
+ */
+
+/**
+ * Implements hook_default_rules_configuration().
+ */
+function ucm_commerce_downloads_config_default_rules_configuration() {
+  $items = array();
+  $items['rules_assign_product_keys'] = entity_import('rules_config', '{ "rules_assign_product_keys" : {
+      "LABEL" : "Assign Product Keys",
+      "PLUGIN" : "reaction rule",
+      "REQUIRES" : [ "commerce_product_key", "commerce_checkout" ],
+      "ON" : [ "commerce_checkout_complete" ],
+      "DO" : [
+        { "assign_product_key_payment_successful" : { "order" : [ "commerce-order" ] } }
+      ]
+    }
+  }');
+  return $items;
+}
