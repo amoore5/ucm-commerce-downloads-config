@@ -17,5 +17,18 @@ function ucm_commerce_downloads_config_default_rules_configuration() {
     "DO" : [ { "assign_product_key" : { "order" : [ "commerce-order" ] } } ]
   }
 }');
+ $items['rules_issue_active_licenses_on_checkout_complete'] = entity_import('rules_config', '{ "rules_issue_active_licenses_on_checkout_complete" : {
+    "LABEL" : "Issue active licenses on checkout complete",
+    "PLUGIN" : "reaction rule",
+    "REQUIRES" : [ "commerce_file", "commerce_checkout" ],
+    "ON" : [ "commerce_checkout_complete" ],
+    "DO" : [
+      { "commerce_file_license_issue_order" : { "order" : [ "commerce-order" ], "license-status" : "active" } }
+    ]
+  }
+}');
   return $items;
+}
+function ucm_commerce_downloads_default_rules_configuration_alter(&$configs) {
+   unset($configs['commerce_file_license_issue_checkout']);
 }
