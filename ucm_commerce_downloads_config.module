@@ -30,5 +30,5 @@ function ucm_commerce_downloads_config_default_rules_configuration() {
   return $items;
 }
 function ucm_commerce_downloads_default_rules_configuration_alter(&$configs) {
-   unset($configs['commerce_file_license_issue_checkout']);
+   $configs['commerce_file_license_issue_checkout']->active = false;
 }
