@@ -15,9 +15,31 @@ function ucm_commerce_downloads_config_default_rules_configuration() {
     "REQUIRES" : [ "commerce_product_key", "commerce_checkout" ],
     "ON" : [ "commerce_checkout_complete" ],
     "DO" : [ { "assign_product_key" : { "order" : [ "commerce-order" ] } } ]
-  }
-}');
+    }
+  }');
 
+  $items['rules_checkout_order_status_update'] = entity_import('rules_config', '{ "rules_checkout_order_status_update" : {
+      "LABEL" : "Update the order status on checkout completion",
+      "PLUGIN" : "reaction rule",
+      "REQUIRES" : [ "commerce_order", "commerce_checkout" ],
+      "ON" : [ "commerce_checkout_complete" ],
+      "DO" : [
+        { "commerce_order_update_state" : { "commerce_order" : [ "commerce-order" ], "order_state" : "completed" } }
+      ]
+    }
+  }');
+
+  $items['rules_revoke_license_on_order_delete'] = entity_import('rules_config', '{ "rules_revoke_license_on_order_delete" : {
+      "LABEL" : "Revoke License and Remove Product Keys on order delete",
+      "PLUGIN" : "reaction rule",
+      "REQUIRES" : [ "commerce_file", "commerce_product_key", "entity" ],
+      "ON" : [ "commerce_order_delete" ],
+      "DO" : [
+        { "commerce_file_license_revoke_order" : { "order" : [ "commerce-order" ] } },
+        { "remove_product_key" : { "order" : [ "commerce-order" ] } }
+      ]
+    }
+  }');
   return $items;
 }
 function ucm_commerce_downloads_default_rules_configuration_alter(&$configs) {
@@ -28,5 +50,5 @@ function ucm_commerce_downloads_default_rules_configuration_alter(&$configs) {
    $configs['commerce_checkout_new_account']->active = false;
    $configs['commerce_file_license_issue_checkout']->active = false;
    $configs['commerce_payment_commerce_payment_example']->active = false;
-   
+   $configs['commerce_checkout_order_status_update']->active = false;
 }
