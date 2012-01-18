@@ -1,4 +1,4 @@
-cname = "UCM Commerce Downloads Config"
+name = "UCM Commerce Downloads Config"
 description = "Configures UCM Commerce Downloads Site"
 core = "7.x"
 version = "7.x-1.0"
