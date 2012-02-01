@@ -45,10 +45,9 @@ function ucm_commerce_downloads_config_default_rules_configuration() {
 function ucm_commerce_downloads_default_rules_configuration_alter(&$configs) {
    //Disable a few rules
    $configs['commerce_file_license_issue_checkout']->active = false;
-   $configs['commerce_payment_commerce_payment_example']->active = false;
    $configs['commerce_checkout_order_convert']->active = false;
    $configs['commerce_checkout_new_account']->active = false;
    $configs['commerce_file_license_issue_checkout']->active = false;
-   $configs['commerce_payment_commerce_payment_example']->active = false;
+   //$configs['commerce_payment_commerce_payment_example']->active = false;
    $configs['commerce_checkout_order_status_update']->active = false;
 }
