@@ -42,12 +42,36 @@ function ucm_commerce_downloads_config_default_rules_configuration() {
   }');
   return $items;
 }
-function ucm_commerce_downloads_default_rules_configuration_alter(&$configs) {
+/**
+* Implements hook_default_rules_configuration_alter
+* 
+* Disables rules created with other modules that issue pending licenses
+* and enable other payment types.
+*/
+function ucm_commerce_downloads_config_default_rules_configuration_alter(&$configs) {
+	//die(var_dump($configs));
    //Disable a few rules
-   $configs['commerce_file_license_issue_checkout']->active = false;
-   $configs['commerce_checkout_order_convert']->active = false;
-   $configs['commerce_checkout_new_account']->active = false;
-   $configs['commerce_file_license_issue_checkout']->active = false;
-   //$configs['commerce_payment_commerce_payment_example']->active = false;
-   $configs['commerce_checkout_order_status_update']->active = false;
+   $ruleToDisable = array('commerce_file_license_issue_checkout',
+   	'commerce_checkout_order_convert',
+   	'commerce_checkout_new_account',
+   	'commerce_file_license_issue_checkout',
+   	'commerce_payment_commerce_payment_example',
+   	'commerce_checkout_order_status_update',
+   );
+   foreach($ruleToDisable as $rule) {
+   	if(in_array($rule, $configs)) {
+   		$configs[$rule]->active = false;
+   	}
+   }
+}
+/**
+*	 Implements hook_field_default_fields_alter
+*/
+function ucm_commerce_downloads_config_field_default_fields_alter(&$fields) {
+//die(var_dump($fields));
+	$fieldName = 'commerce_product-digital_product-field_purchaseable_file';
+	if(!empty($fields[$fieldName])) {
+		$fields[$fieldName]['field_config']['cardinality'] = FIELD_CARDINALITY_UNLIMITED;
+		$fields[$fieldName]['field_instance']['settings']['file_extensions'] = 'zip tar gz';
+	}
 }
