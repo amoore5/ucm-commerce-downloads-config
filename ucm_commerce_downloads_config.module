@@ -7,7 +7,7 @@
 /**
  * Implements hook_default_rules_configuration().
  */
-/*function ucm_commerce_downloads_config_default_rules_configuration() {
+function ucm_commerce_downloads_config_default_rules_configuration() {
   $items = array();
   $items['rules_assign_product_keys'] = entity_import('rules_config', '{ "rules_assign_product_keys" : {
     "LABEL" : "Assign Product Keys",
@@ -41,7 +41,7 @@
     }
   }');
   return $items;
-}*/
+}
 /**
 * Implements hook_default_rules_configuration_alter
 * 
@@ -49,29 +49,40 @@
 * and enable other payment types.
 */
 function ucm_commerce_downloads_config_default_rules_configuration_alter(&$configs) {
-	//die(var_dump($configs));
    //Disable a few rules
-   $ruleToDisable = array('commerce_file_license_issue_checkout',
+   $rulesToDisable = array('commerce_file_license_issue_checkout',
    	'commerce_checkout_order_convert',
    	'commerce_checkout_new_account',
    	'commerce_file_license_issue_checkout',
    	'commerce_payment_commerce_payment_example',
    	'commerce_checkout_order_status_update',
    );
-   foreach($ruleToDisable as $rule) {
-   	if(in_array($rule, $configs)) {
+   foreach($rulesToDisable as $rule) {
+   	if(isset($configs[$rule])) {
    		$configs[$rule]->active = false;
    	}
    }
 }
 /**
 *	 Implements hook_field_default_fields_alter
+*  Allows the upload of any number of files per digital product and
+*  allows zip tar and gz file upload extensions
 */
 function ucm_commerce_downloads_config_field_default_fields_alter(&$fields) {
-//die(var_dump($fields));
+
 	$fieldName = 'commerce_product-digital_product-field_purchaseable_file';
-	if(!empty($fields[$fieldName])) {
+	if(isset($fields[$fieldName])) {
 		$fields[$fieldName]['field_config']['cardinality'] = FIELD_CARDINALITY_UNLIMITED;
 		$fields[$fieldName]['field_instance']['settings']['file_extensions'] = 'zip tar gz';
 	}
+}
+/**
+* Implements hook_field_info_alter
+* Sets the default file upload location for commerce_file to private
+*/
+function ucm_commerce_downloads_config_field_info_alter(&$info) {
+  $fieldName = 'commerce_file';
+  if(isset($info[$fieldName])) {
+    $info[$fieldName]['settings']['uri_scheme'] = 'private';
+  }
 }
