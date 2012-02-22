@@ -74,6 +74,15 @@ function ucm_commerce_downloads_config_field_default_fields_alter(&$fields) {
 	if(isset($fields[$fieldName])) {
 		$fields[$fieldName]['field_config']['cardinality'] = FIELD_CARDINALITY_UNLIMITED;
 		$fields[$fieldName]['field_instance']['settings']['file_extensions'] = 'zip tar gz';
+    $fields[$fieldName]['field_instance']['widget']['settings']['filefield_sources']['filefield_sources'] = array(
+      'attach' => 'attach'
+    );
+    $fields[$fieldName]['field_instance']['widget']['settings']['filefield_sources']['source_attach'] = array(
+      'path' => 'file_attach',
+      'absolute' => '0',
+      'attach_mode' => 'copy',
+    );
+    //die(var_dump($fields[$fieldName]));
 	}
 }
 /**
@@ -85,4 +94,18 @@ function ucm_commerce_downloads_config_field_info_alter(&$info) {
   if(isset($info[$fieldName])) {
     $info[$fieldName]['settings']['uri_scheme'] = 'private';
   }
+  $fieldName = 'field_purchaseable_file';
+}
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ */
+function ucm_commerce_downloads_config_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
+  $instance = $form['#instance'];
+  if(isset($form['instance']['widget']['settings']['filefield_sources'])) {
+    die(var_dump($form['instance']['widget']['settings']['filefield_sources']));
+  }
+  /*if (in_array($instance['widget']['type'], module_invoske_all('filefield_sources_widgets'))) {
+    $form['instance']['widget']['settings'] += filefield_sources_form($instance);
+  }*/
 }
