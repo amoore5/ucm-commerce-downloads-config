@@ -9,25 +9,6 @@
  */
 function ucm_commerce_downloads_config_default_rules_configuration() {
   $items = array();
-  $items['rules_assign_product_keys'] = entity_import('rules_config', '{ "rules_assign_product_keys" : {
-    "LABEL" : "Assign Product Keys",
-    "PLUGIN" : "reaction rule",
-    "REQUIRES" : [ "commerce_product_key", "commerce_checkout" ],
-    "ON" : [ "commerce_checkout_complete" ],
-    "DO" : [ { "assign_product_key" : { "order" : [ "commerce-order" ] } } ]
-    }
-  }');
-
-  $items['rules_checkout_order_status_update'] = entity_import('rules_config', '{ "rules_checkout_order_status_update" : {
-      "LABEL" : "Update the order status on checkout completion",
-      "PLUGIN" : "reaction rule",
-      "REQUIRES" : [ "commerce_order", "commerce_checkout" ],
-      "ON" : [ "commerce_checkout_complete" ],
-      "DO" : [
-        { "commerce_order_update_state" : { "commerce_order" : [ "commerce-order" ], "order_state" : "completed" } }
-      ]
-    }
-  }');
 
   $items['rules_revoke_license_on_order_delete'] = entity_import('rules_config', '{ "rules_revoke_license_on_order_delete" : {
       "LABEL" : "Revoke License and Remove Product Keys on order delete",
@@ -55,7 +36,6 @@ function ucm_commerce_downloads_config_default_rules_configuration_alter(&$confi
    	'commerce_checkout_new_account',
    	'commerce_file_license_issue_checkout',
    	'commerce_payment_commerce_payment_example',
-   	'commerce_checkout_order_status_update',
    );
    foreach($rulesToDisable as $rule) {
    	if(isset($configs[$rule])) {
@@ -82,8 +62,8 @@ function ucm_commerce_downloads_config_field_default_fields_alter(&$fields) {
       'absolute' => '0',
       'attach_mode' => 'copy',
     );
-    //die(var_dump($fields[$fieldName]));
 	}
+  //die(var_dump($fields));
 }
 /**
 * Implements hook_field_info_alter
@@ -94,18 +74,4 @@ function ucm_commerce_downloads_config_field_info_alter(&$info) {
   if(isset($info[$fieldName])) {
     $info[$fieldName]['settings']['uri_scheme'] = 'private';
   }
-  $fieldName = 'field_purchaseable_file';
-}
-
-/**
- * Implements hook_form_FORM_ID_alter().
- */
-function ucm_commerce_downloads_config_form_field_ui_field_edit_form_alter(&$form, &$form_state) {
-  $instance = $form['#instance'];
-  if(isset($form['instance']['widget']['settings']['filefield_sources'])) {
-    die(var_dump($form['instance']['widget']['settings']['filefield_sources']));
-  }
-  /*if (in_array($instance['widget']['type'], module_invoske_all('filefield_sources_widgets'))) {
-    $form['instance']['widget']['settings'] += filefield_sources_form($instance);
-  }*/
 }
