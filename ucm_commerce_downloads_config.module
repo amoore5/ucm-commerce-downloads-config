@@ -10,8 +10,8 @@
 function ucm_commerce_downloads_config_default_rules_configuration() {
   $items = array();
 
-  $items['rules_revoke_license_on_order_delete'] = entity_import('rules_config', '{ "rules_revoke_license_on_order_delete" : {
-      "LABEL" : "Revoke License and Remove Product Keys on order delete",
+/*  $items['rules_revoke_license_on_order_delete'] = entity_import('rules_config', '{ "rules_revoke_license_on_order_delete" : {
+      "LABEL" : "Revoke License  on order delete",
       "PLUGIN" : "reaction rule",
       "REQUIRES" : [ "commerce_file", "entity" ],
       "ON" : [ "commerce_order_delete" ],
@@ -20,7 +20,7 @@ function ucm_commerce_downloads_config_default_rules_configuration() {
      }
       ]
     }
-  }');
+  }');*/
   return $items;
 }
 /**
